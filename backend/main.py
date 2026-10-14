@@ -15,8 +15,7 @@ logger = logging.getLogger("mindscore")
 
 model = joblib.load(Path(__file__).parent / 'mental_health_model.pkl')
 
-# ALLOWED_ORIGINS: comma-separated list of origins allowed to call this API.
-# ENABLE_DOCS:     set to 0/false/no to hide /docs, /redoc and /openapi.json.
+
 ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.getenv("ALLOWED_ORIGINS", "http://localhost:5500").split(",")
@@ -48,7 +47,7 @@ class StudentData(BaseModel):
     model_config = ConfigDict(extra='forbid')
 
     age                     : int = Field(..., ge=10, le=100)
-    country                 : str = Field(..., max_length=60)
+    country                 : str = Field(..., min_length=1, max_length=60)
     gender                  : Literal['Male', 'Female']
     academic_level          : Literal['Undergraduate', 'Graduate', 'High School']
     most_used_platform      : Literal['Facebook', 'LinkedIn', 'Instagram', 'Snapchat', 'Twitter', 'YouTube', 'TikTok', 'LINE', 'KakaoTalk', 'VKontakte', 'WhatsApp','WeChat']
