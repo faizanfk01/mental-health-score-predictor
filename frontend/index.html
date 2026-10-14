@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Only this origin, Google Fonts, and the API may be loaded or contacted.
+       If you change API_BASE_URL in app.js, update connect-src to match. -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'none';
+    script-src 'self';
+    style-src 'self' https://fonts.googleapis.com;
+    font-src https://fonts.gstatic.com;
+    img-src 'self' data:;
+    connect-src 'self' http://localhost:8000;
+    base-uri 'none';
+    form-action 'none'" />
+  <title>MindScore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+
+    <header class="head">
+      <h1>MindScore</h1>
+      <p class="lede">Estimates a mental health score from your daily habits.</p>
+    </header>
+
+    <div class="layout">
+
+      <!-- ============================ FORM ============================ -->
+      <form id="form" class="card" novalidate autocomplete="off">
+
+        <h2 class="group">Profile</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="age">Age</label>
+            <input id="age" name="age" type="number" min="10" max="100" step="1"
+                   inputmode="numeric" placeholder="e.g. 21" aria-describedby="age-help age-err" />
+            <p class="help" id="age-help">Between 10 and 100.</p>
+            <p class="err" id="age-err" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="country">Country</label>
+            <input id="country" name="country" type="text" placeholder="Enter your country"
+                   spellcheck="false" aria-describedby="country-help country-err" />
+            <p class="help" id="country-help">Unlisted countries count as Other.</p>
+            <p class="err" id="country-err" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" aria-describedby="gender-err">
+              <option value="" disabled selected>Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <p class="err" id="gender-err" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="academic_level">Academic level</label>
+            <select id="academic_level" name="academic_level" aria-describedby="academic_level-err">
+              <option value="" disabled selected>Select</option>
+              <option value="High School">High School</option>
+              <option value="Undergraduate">Undergraduate</option>
+              <option value="Graduate">Graduate</option>
+            </select>
+            <p class="err" id="academic_level-err" hidden></p>
+          </div>
+        </div>
+
+        <h2 class="group">Social Media Habits</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="most_used_platform">Most used platform</label>
+            <select id="most_used_platform" name="most_used_platform" aria-describedby="most_used_platform-err">
+              <option value="" disabled selected>Select</option>
+              <option value="Facebook">Facebook</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Snapchat">Snapchat</option>
+              <option value="Twitter">Twitter</option>
+              <option value="YouTube">YouTube</option>
+              <option value="TikTok">TikTok</option>
+              <option value="LINE">LINE</option>
+              <option value="KakaoTalk">KakaoTalk</option>
+              <option value="VKontakte">VKontakte</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="WeChat">WeChat</option>
+            </select>
+            <p class="err" id="most_used_platform-err" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="purpose_of_use">Purpose of use</label>
+            <select id="purpose_of_use" name="purpose_of_use" aria-describedby="purpose_of_use-err">
+              <option value="" disabled selected>Select</option>
+              <option value="Networking">Networking</option>
+              <option value="Education">Education</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="News">News</option>
+            </select>
+            <p class="err" id="purpose_of_use-err" hidden></p>
+          </div>
+
+          <div class="field field--wide">
+            <div class="field__row">
+              <label for="avg_daily_usage_hours">Daily social media use</label>
+              <output class="readout" id="avg_daily_usage_hours-out" for="avg_daily_usage_hours">5.0 hrs</output>
+            </div>
+            <input class="slider" id="avg_daily_usage_hours" name="avg_daily_usage_hours"
+                   type="range" min="0" max="16" step="0.5" value="5"
+                   aria-describedby="avg_daily_usage_hours-err" />
+            <p class="err" id="avg_daily_usage_hours-err" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="daily_unlocks">Phone unlocks per day</label>
+            <input id="daily_unlocks" name="daily_unlocks" type="number" min="0" step="1"
+                   inputmode="numeric" placeholder="e.g. 120" aria-describedby="daily_unlocks-err" />
+            <p class="err" id="daily_unlocks-err" hidden></p>
+          </div>
+        </div>
+
+        <h2 class="group">Daily Life</h2>
+        <div class="grid">
+          <div class="field field--wide">
+            <div class="field__row">
+              <label for="study_hours">Study Hours</label>
+              <output class="readout" id="study_hours-out" for="study_hours">3.0 hrs</output>
+            </div>
+            <input class="slider" id="study_hours" name="study_hours"
+                   type="range" min="0" max="16" step="0.5" value="3"
+                   aria-describedby="study_hours-err" />
+            <p class="err" id="study_hours-err" hidden></p>
+          </div>
+
+          <div class="field field--wide">
+            <div class="field__row">
+              <label for="physical_activity_hours">Physical Activity</label>
+              <output class="readout" id="physical_activity_hours-out" for="physical_activity_hours">1.5 hrs</output>
+            </div>
+            <input class="slider" id="physical_activity_hours" name="physical_activity_hours"
+                   type="range" min="0" max="8" step="0.5" value="1.5"
+                   aria-describedby="physical_activity_hours-err" />
+            <p class="err" id="physical_activity_hours-err" hidden></p>
+          </div>
+
+          <div class="field field--wide">
+            <div class="field__row">
+              <label for="sleep_hours_per_night">Sleep</label>
+              <output class="readout" id="sleep_hours_per_night-out" for="sleep_hours_per_night">6.5 hrs</output>
+            </div>
+            <input class="slider" id="sleep_hours_per_night" name="sleep_hours_per_night"
+                   type="range" min="0" max="14" step="0.5" value="6.5"
+                   aria-describedby="sleep_hours_per_night-err" />
+            <p class="err" id="sleep_hours_per_night-err" hidden></p>
+          </div>
+        </div>
+
+        <fieldset class="segmented" id="stress_level-group">
+          <legend>Stress level</legend>
+          <div class="segmented__options" aria-describedby="stress_level-err">
+            <input type="radio" name="stress_level" id="stress-low" value="Low" />
+            <label for="stress-low">Low</label>
+            <input type="radio" name="stress_level" id="stress-medium" value="Medium" />
+            <label for="stress-medium">Medium</label>
+            <input type="radio" name="stress_level" id="stress-high" value="High" />
+            <label for="stress-high">High</label>
+            <input type="radio" name="stress_level" id="stress-veryhigh" value="Very High" />
+            <label for="stress-veryhigh">Very High</label>
+          </div>
+          <p class="err" id="stress_level-err" hidden></p>
+        </fieldset>
+
+        <button type="submit" class="btn" id="submit">Predict</button>
+      </form>
+
+      <!-- ============================ RESULT ============================ -->
+      <aside class="panel" id="panel" aria-live="polite">
+
+        <!-- 1. empty -->
+        <div class="state" id="state-empty">
+          <p class="state__text">Fill in the form to see your estimated score.</p>
+        </div>
+
+        <!-- 2. loading -->
+        <div class="state" id="state-loading" hidden>
+          <span class="spinner" aria-hidden="true"></span>
+          <p class="state__text">Estimating your score&hellip;</p>
+        </div>
+
+        <!-- 3. error -->
+        <div class="state" id="state-error" hidden>
+          <p class="state__text state__text--error" id="error-text"></p>
+        </div>
+
+        <!-- 4. result -->
+        <div class="state" id="state-result" hidden>
+          <div class="ring" role="meter" id="ring" aria-valuemin="0" aria-valuemax="10"
+               aria-valuenow="0" aria-label="Estimated mental health score out of 10">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring__track" cx="60" cy="60" r="52" />
+              <circle class="ring__value" cx="60" cy="60" r="52" id="ring-value" />
+            </svg>
+            <p class="ring__score">
+              <span class="ring__num">
+                <span id="score">&mdash;</span><span class="ring__max">/10</span>
+              </span>
+            </p>
+          </div>
+
+          <p class="pill" id="band" data-band=""></p>
+          <button type="button" class="btn btn--ghost" id="restart">Start over</button>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
