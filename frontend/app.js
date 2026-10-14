@@ -1,6 +1,6 @@
 /* MindScore — form logic. Plain ES2020, no dependencies. */
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://mental-health-score-predictor-xpug.onrender.com";
 
 /* Interpretation bands, cut on the training-data quartiles. */
 const BANDS = [
@@ -226,6 +226,7 @@ form.addEventListener("submit", async (event) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(buildPayload(raw)),
+      signal: AbortSignal.timeout(60000),
     });
 
     if (response.status === 422) {
@@ -240,7 +241,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     if (!response.ok) {
-      showError(`The server returned ${response.status}. Check the uvicorn console.`);
+      showError("Something went wrong on the server. Please try again in a moment.");
       return;
     }
 
@@ -253,7 +254,7 @@ form.addEventListener("submit", async (event) => {
 
     render(score);
   } catch {
-    showError(`Could not reach ${API_BASE_URL}. Is uvicorn running?`);
+    showError("Could not reach the server. It may be waking up — please try again in a minute.");
   } finally {
     $("submit").disabled = false;
   }
