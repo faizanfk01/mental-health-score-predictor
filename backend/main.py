@@ -90,7 +90,6 @@ def predict(request: Request, data: StudentData):
         prediction = model.predict(input_row)[0]
         score = round(float(prediction), 2)
     except Exception:
-        # Full traceback to the server log; the client gets nothing internal.
         logger.exception("Prediction failed")
         raise HTTPException(status_code=500, detail="Could not produce a prediction. Please try again later.")
 

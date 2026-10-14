@@ -1,21 +1,8 @@
-# Pinned to the versions installed in .venv (Python 3.14.4).
 fastapi==0.143.1
 pandas==3.0.6
 numpy==2.5.4
 scikit-learn==1.9.1
 joblib==1.6.0
 pydantic==2.14.1
-
-# per-IP rate limiting on /predict (pulls in `limits` transitively)
 slowapi==0.1.10
-
-# uvicorn is not installed in .venv. This pin is the only version present on
-# this machine (under Python 3.13), so `pip install -r requirements.txt` will
-# fetch it into .venv on first run.
 uvicorn==0.32.1
-
-# NOTE: mental_health_model.pkl was trained under scikit-learn 1.7.2 (Anaconda).
-# Loading it with 1.9.1 emits InconsistentVersionWarning on startup. Verified to
-# load and predict identically (5.85 on the same row), so the warning is noise,
-# not breakage. To silence it, pin scikit-learn==1.7.2 or retrain the pipeline
-# via notebooks/model_training.ipynb.
